@@ -9,14 +9,10 @@ public class Booking {
 	private long id;
 	private long room;
 	private long user;
+	private double bonusPoints;
 	
-	public Booking() {	
+	public Booking() {
 		
-	}
-	
-	public Booking(long room, long user) {
-		this.room = room;
-		this.user = user;
 	}
 	
 	@Id
@@ -40,6 +36,13 @@ public class Booking {
 	}
 	public void setUser(long user) {
 		this.user = user;
+	}
+	
+	public double getBonusPoints() {
+		return bonusPoints;
+	}
+	public void setBonusPoints(double bonusPoints) {
+		this.bonusPoints = bonusPoints;
 	}
 	
 }

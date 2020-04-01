@@ -28,19 +28,20 @@ public class BookingServiceImpl implements BookingService {
 		User user = userRepository.findById(booking.getUser()).get();
 		Room room = roomRepository.findById(booking.getRoom()).get();
 		
-		if (room.getStatus().equals("OPEN")) {
+		if (!room.getStatus().equals("BOOKED")) {
 			if (user.getBonusPoints() >= room.getPrice()) {
 				room.setStatus("BOOKED");
 				user.setBonusPoints(user.getBonusPoints() - room.getPrice());
 			} else {
-				room.setStatus("PENDING APPROVAL");
+				room.setStatus("PENDING_APPROVAL");
+				room.setRemainingAmount(room.getPrice() - user.getBonusPoints());
 				user.setBonusPoints(0d);
 			}
 			userRepository.save(user);
 			room.setUser(user);
 			roomRepository.save(room);
 		} else
-			room.setStatus("CANNOT BE BOOKED");
+			room.setStatus("CANNOT_BE_BOOKED");
 		
 		return room.getStatus();
 	}
@@ -54,6 +55,26 @@ public class BookingServiceImpl implements BookingService {
 	public Room findById(Long roomId) throws ResourceNotFoundException {
 		return roomRepository.findById(roomId)
 				.orElseThrow(() -> new ResourceNotFoundException("Room not found for this id :: " + roomId));
+	}
+
+	@Override
+	public List<Room> updatePoints(@Valid Booking booking) {
+		User user = userRepository.findById(booking.getUser()).get();
+		user.setBonusPoints(user.getBonusPoints() + booking.getBonusPoints());
+		userRepository.save(user);
+		
+		List<Room> bookedRooms = roomRepository.findByUserAndStatus(user, "PENDING_APPROVAL");
+		for (Room room : bookedRooms) {
+			if (user.getBonusPoints() >= room.getPrice()) {
+				room.setStatus("BOOKED");
+				user.setBonusPoints(user.getBonusPoints() - room.getRemainingAmount());
+				userRepository.save(user);
+				room.setUser(user);
+				room.setRemainingAmount(0d);
+				roomRepository.save(room);
+			}
+		}
+		return bookedRooms;
 	}
 	
 	

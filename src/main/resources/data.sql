@@ -19,6 +19,7 @@ CREATE TABLE room (
   id INT AUTO_INCREMENT  PRIMARY KEY,
   status VARCHAR(250) DEFAULT NULL,
   price DOUBLE NOT NULL,
+  remaining_amount DOUBLE DEFAULT 0,
   user_id INT DEFAULT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );

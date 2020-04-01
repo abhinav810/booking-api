@@ -15,5 +15,7 @@ public interface BookingService {
 	List<Room> showBookings();
 
 	Room findById(Long roomId) throws ResourceNotFoundException;
+
+	List<Room> updatePoints(@Valid Booking booking);
 	
 }

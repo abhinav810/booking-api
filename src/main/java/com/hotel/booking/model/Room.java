@@ -16,6 +16,7 @@ public class Room {
 	private long id;
 	private String status;
 	private double price;
+	private double remainingAmount;
 	private User user;
 	
 	public Room() {		
@@ -45,6 +46,14 @@ public class Room {
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	
+	@Column(name = "remaining_amount")
+	public double getRemainingAmount() {
+		return remainingAmount;
+	}
+	public void setRemainingAmount(double remainingAmount) {
+		this.remainingAmount = remainingAmount;
 	}
 	
 	@ManyToOne

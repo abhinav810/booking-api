@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hotel.booking.exception.ResourceNotFoundException;
 import com.hotel.booking.model.Booking;
 import com.hotel.booking.model.Room;
+import com.hotel.booking.model.User;
 import com.hotel.booking.service.BookingService;
 
 @CrossOrigin(origins = "*")
@@ -47,5 +49,10 @@ public class BookingController {
 		Map<String, String> response = new HashMap<>();
 		response.put("status", status);
 		return response;
+	}
+	
+	@PutMapping("/points")
+	public List<Room> updatePoints(@Valid @RequestBody Booking booking) {
+		return bookingService.updatePoints(booking);
 	}
 }
